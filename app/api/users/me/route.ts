@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { api } from '../../api';
 import { cookies } from 'next/headers';
-import { logErrorResponse } from '../../_utils/utils';
+import { logErrorResponse } from '@/app/api/_ulits/ulits';
 import { isAxiosError } from 'axios';
 
 export async function GET() {
@@ -29,12 +29,12 @@ export async function GET() {
   }
 }
 
-export async function PATCH(request: Request) {
+export async function POST(request: Request) {
   try {
     const cookieStore = await cookies();
     const body = await request.json();
 
-    const res = await api.patch('/users/me', body, {
+    const res = await api.post('/users/me', body, {
       headers: {
         Cookie: cookieStore.toString(),
       },

@@ -1,10 +1,16 @@
 "use client"
 import css from "@/app/(auth routes)/sign-up/SignUp.module.css"
+
+
 export default function SignUp() {
+  const handleSubmit = async(formData: FormData) => {
+  
+}
+
     return (
     <main className={css.mainContent}>
   <h1 className={css.formTitle}>Sign up</h1>
-	<form className={css.form}>
+	<form className={css.form} action={handleSubmit}>
     <div className={css.formGroup}>
       <label htmlFor="email">Email</label>
       <input id="email" type="email" name="email" className={css.input} required />

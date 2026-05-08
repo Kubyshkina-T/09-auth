@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { api } from '../../api';
+import { api, createErrorResponse } from '@/app/api/api';
 import { cookies } from 'next/headers';
-import { logErrorResponse } from '../../_utils/utils';
+import { logErrorResponse } from '@/app/api/_ulits/ulits';
 import { isAxiosError } from 'axios';
 
 type Props = {
@@ -12,7 +12,7 @@ export async function GET(request: Request, { params }: Props) {
   try {
     const cookieStore = await cookies();
     const { id } = await params;
-    const res = await api(`/notes/${id}`, {
+    const res = await api.get(`/notes/${id}`, {
       headers: {
         Cookie: cookieStore.toString(),
       },
@@ -22,8 +22,9 @@ export async function GET(request: Request, { params }: Props) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);
       return NextResponse.json(
-        { error: error.message, response: error.response?.data },
-        { status: error.status }
+        // { error: error.message, response: error.response?.data },
+        // { status: error.status }
+        createErrorResponse
       );
     }
     logErrorResponse({ message: (error as Error).message });
@@ -46,8 +47,9 @@ export async function DELETE(request: Request, { params }: Props) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);
       return NextResponse.json(
-        { error: error.message, response: error.response?.data },
-        { status: error.status }
+        // { error: error.message, response: error.response?.data },
+        // { status: error.status }
+        createErrorResponse
       );
     }
     logErrorResponse({ message: (error as Error).message });
@@ -71,8 +73,9 @@ export async function PATCH(request: Request, { params }: Props) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);
       return NextResponse.json(
-        { error: error.message, response: error.response?.data },
-        { status: error.status }
+        // { error: error.message, response: error.response?.data },
+        // { status: error.status }
+       createErrorResponse
       );
     }
     logErrorResponse({ message: (error as Error).message });

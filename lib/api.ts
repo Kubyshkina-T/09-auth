@@ -1,37 +1,24 @@
-import axios, {AxiosError } from "axios";
+import axios  from "axios";
 import type { Note} from "@/types/note";
 import type { FormValues } from "../components/NoteForm/NoteForm";
-import { NextResponse } from "next/server";
+
 
 export interface NotesResponse {
   notes: Note[];
   totalPages: number;
 }
-// axios.defaults.baseURL = "https://notehub-public.goit.study/api";
 
-
-export type ApiError = AxiosError<{ error: string }>;
-
-export const createErrorResponse = (error: ApiError) => {
-  return NextResponse.json(
-    {
-      error:
-        error.response?.data?.error ?? error.message,
-    },
-    { status: error.status },
-  );
-}
-
-
-axios.defaults.baseURL = "process.env.NEXT_PUBLIC_API_URL + '/api'"
-
-export const api = axios.create({
-  baseURL: "https://notehub-api.goit.study",
-   withCredentials: true,
+export const nextServer = axios.create({
+  baseURL: "http://localhost:3000/api",
+  withCredentials: true,
+    headers: {
+    Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
+  },
 })
 
-axios.defaults.headers.common["Authorization"] =
-  `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`;
+// axios.defaults.headers.common["Authorization"] =
+// `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`;
+//   // `Bearer ${process.env.NEXT_PUBLIC_API_URL}`;
     
 export const fetchNotes = async (
   page: number = 1,
@@ -39,7 +26,7 @@ export const fetchNotes = async (
     searchQuery: string = "",
   tag?: string
 ): Promise<NotesResponse> => {
-    const res = await axios.get<NotesResponse>("/notes", {
+    const res = await nextServer.get<NotesResponse>("/notes", {
     params: {
       page,
       perPage,
@@ -54,17 +41,19 @@ export const fetchNotes = async (
 
 export const fetchNoteById = async (postId: string) => {
     console.log("ID:", postId);
-  const res = await axios.get<Note>(`/notes/${postId}`);
+  const res = await nextServer.get<Note>(`/notes/${postId}`);
   return res.data;
 } 
 
+
 export const createNote = async (note: FormValues): Promise<Note> => {
-  const res = await axios.post<Note>("/notes", note);
+  const res = await nextServer.post<Note>("/notes", note);
   return res.data;
 };
 
+
 export const deleteNote = async (postId: string): Promise<Note> => {
-  const res = await axios.delete<Note>(`/notes/${postId}`);
+  const res = await nextServer.delete<Note>(`/notes/${postId}`);
   return res.data;
 };
 
@@ -76,3 +65,15 @@ export type Category = {
     updatedAt: string;
     tag: string;
 }
+
+
+
+// Auth
+
+export type RegisterRequest = {
+  email: string;
+  password: string;
+  userName: string;
+};
+
+export

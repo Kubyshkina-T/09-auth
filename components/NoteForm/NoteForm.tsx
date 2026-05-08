@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export interface FormValues {
   title: string;
   content: string;
-  tag: "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
+  tag: "Todo" | "Work" | "Personal" | "Meeting" | "Shopping" | "Ideas" | "Travel" | "Finance" | "Health" | "Important";
 }
 
 
@@ -96,7 +96,12 @@ const handleCancel = () => router.push("/notes/filter/all")
             <option value="Work">Work</option>
             <option value="Personal">Personal</option>
             <option value="Meeting">Meeting</option>
-            <option value="Shopping">Shopping</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Ideas">Ideas</option>
+            <option value="Travel">Travel</option>
+          <option value="Finance">Finance</option>
+            <option value="Health">Health</option>
+            <option value="Important">Important</option>
           </select>
         </div>
 

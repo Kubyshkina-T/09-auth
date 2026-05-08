@@ -3,7 +3,7 @@ import css from "@/components/SidebarNotes/SidebarNotes.module.css";
 import Link from "next/link";
 
 export const SidebarNotes = async () => {
-    const categories = ["Todo", "Work", "Personal", "Meeting", "Shopping"]
+    const categories = ["Todo", "Work", "Personal", "Meeting", "Shopping", "Ideas", "Travel", "Finance", "Health", "Important"]
 
     return (
         <ul className={css.menuList}>
