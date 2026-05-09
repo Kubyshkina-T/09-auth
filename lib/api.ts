@@ -3,6 +3,7 @@ import type { Note} from "@/types/note";
 import type { FormValues } from "../components/NoteForm/NoteForm";
 
 
+
 export interface NotesResponse {
   notes: Note[];
   totalPages: number;
@@ -69,11 +70,17 @@ export type Category = {
 
 
 // Auth
+import { User } from "@/types/user";
 
 export type RegisterRequest = {
   email: string;
   password: string;
-  userName: string;
+  // userName: string;
 };
 
-export
+export const register = async (data: RegisterRequest) => {
+  const res = await nextServer.post<User>("/auth/register", data);
+  return res.data;
+}
+
+
