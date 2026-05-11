@@ -1,20 +1,23 @@
 "use client"
 import css from "@/app/(auth routes)/sign-up/SignUp.module.css"
 import { ApiError } from "@/app/api/api";
-import { register, RegisterRequest } from "@/lib/api"
+import { register, RegisterRequest } from "@/lib/api/clientApi"
+import { useAuthStore } from "@/lib/store/authStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignUp() {
   const router = useRouter();
   const [error, setError] = useState("");
+  const setUser = useAuthStore((state) => state.setUser);
 
   const handleSubmit = async (formData: FormData) => {
     try {
       const values = Object.fromEntries(formData) as RegisterRequest
-      const res = await register(values)
-      console.log(res)
-      if (res) {
+      const user = await register(values)
+     
+      if (user) {
+        setUser(user);
         router.push("/profile")
       } else {
         setError("Invalid id email or password");
@@ -48,9 +51,9 @@ export default function SignUp() {
       </button>
     </div>
 
-    <p className={css.error}>Error</p>
+          <p className={css.error}>{ error}</p>
         </form>
-        {error && <p>{error}</p>}
+        {/* {error && <p>{error}</p>} */}
 </main>
 
 )

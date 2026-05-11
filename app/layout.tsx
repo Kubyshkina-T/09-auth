@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider"
+import AuthProvider from "@/components/AuthProvider/AuthProvider";
 
 const robotoFont = Roboto({
   variable: "--font-roboto",
@@ -41,11 +42,13 @@ export default function RootLayout({
     <html lang="en" className={`${robotoFont.variable}`}>
       <body>
         <TanStackProvider>
+          <AuthProvider>
         <Header/>
         {children}
         {modal}
         <div id="modal-root"></div>
-        <Footer />
+            <Footer />
+            </AuthProvider>
         </TanStackProvider>
       </body>
     </html>
