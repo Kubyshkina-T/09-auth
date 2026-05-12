@@ -18,9 +18,7 @@ export const getServerMe = async (): Promise<User> => {
   const cookieStore = await cookies();
   const { data } = await nextServer.get('/users/me', {
     headers: {
-      Cookie: cookieStore.getAll()
-    .map(({ name, value }) => `${name}=${value}`)
-    .join("; ")
+      Cookie:  cookieStore.toString()
 ,
     },
   });
@@ -36,3 +34,33 @@ export const getServerSingleNote = async (id: string) => {
   });
   return res.data;
 };
+
+
+export interface NotesResponse {
+  notes: Note[];
+  totalPages: number;
+}
+
+export const fetchNotes = async (
+  page: number = 1,
+  perPage: number = 12,
+    searchQuery: string = "",
+  tag?: string
+): Promise<NotesResponse> => {
+    const res = await nextServer.get<NotesResponse>("/notes", {
+    params: {
+      page,
+      perPage,
+            search: searchQuery,
+      tag,
+        },
+        
+  });
+
+  return res.data;
+};
+
+export const fetchNoteById = async (postId: string): Promise<Note> => {
+  const res = await nextServer.get<Note>(`/notes/${postId}`);
+  return res.data;
+} 

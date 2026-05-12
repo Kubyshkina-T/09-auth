@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { api } from '../../api';
 import { cookies } from 'next/headers';
-import { logErrorResponse } from '@/app/api/_ulits/ulits';
+import { logErrorResponse } from '../../_ulits/ulits';
 import { isAxiosError } from 'axios';
 
 export async function GET() {

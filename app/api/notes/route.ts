@@ -1,82 +1,66 @@
-// import { NextResponse, NextRequest } from "next/server";
-// import { api, ApiError, createErrorResponse } from "@/app/api/api";
-
-
-// export async function GET(request: NextRequest) {
-//     const postId = request.nextUrl.searchParams.get("postId");
-//     try {
-//         const { data } = await api.get("/notes", {
-//             params: { postId },
-//         });
-//         return NextResponse.json(data);
-//     }
-//     catch (error) {
-//         return createErrorResponse(error as ApiError)
-//     }
-// }
-
-// export async function POST(request: NextRequest) {
-//     try {
-//         const body = await request.json();
-//         const { data } = await api.post("/notes", body);
-//         return NextResponse.json(data);
-//     } catch (error) {
-//         return createErrorResponse(error as ApiError)
-//     }
-// }
-
-import { NextResponse, NextRequest } from "next/server";
-import { cookies } from "next/headers";
-import { api, ApiError, createErrorResponse } from "@/app/api/api";
-
-const getCookieHeader = async () => {
-  const cookieStore = await cookies();
-
-  return cookieStore
-    .getAll()
-    .map(({ name, value }) => `${name}=${value}`)
-    .join("; ");
-};
+import { NextRequest, NextResponse } from 'next/server';
+import { api } from '../api';
+import { cookies } from 'next/headers';
+import { isAxiosError } from 'axios';
+import { logErrorResponse } from '../../api/_ulits/ulits';
 
 export async function GET(request: NextRequest) {
-  const page = request.nextUrl.searchParams.get("page");
-  const perPage = request.nextUrl.searchParams.get("perPage");
-  const search = request.nextUrl.searchParams.get("search");
- const tag = request.nextUrl.searchParams.get("tag");
   try {
-    const cookieHeader = await getCookieHeader();
+    const cookieStore = await cookies();
+    const search = request.nextUrl.searchParams.get('search') ?? '';
+    const page = Number(request.nextUrl.searchParams.get('page') ?? 1);
+    const rawTag = request.nextUrl.searchParams.get('tag') ?? '';
+    const tag = rawTag === 'All' ? '' : rawTag;
 
-    const { data } = await api.get("/notes", {
+    const res = await api('/notes', {
       params: {
+        ...(search !== '' && { search }),
         page,
-        perPage,
-            search,
-        tag
+        perPage: 12,
+        ...(tag && { tag }),
       },
       headers: {
-        Cookie: cookieHeader,
+        Cookie: cookieStore.toString(),
       },
     });
 
-    return NextResponse.json(data);
+    return NextResponse.json(res.data, { status: res.status });
   } catch (error) {
-    return createErrorResponse(error as ApiError);
+    if (isAxiosError(error)) {
+      logErrorResponse(error.response?.data);
+      return NextResponse.json(
+        { error: error.message, response: error.response?.data },
+        { status: error.status }
+      );
+    }
+    logErrorResponse({ message: (error as Error).message });
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const cookieHeader = await getCookieHeader();
+    const cookieStore = await cookies();
 
-    const { data } = await api.post("/notes", body, {
+    const body = await request.json();
+
+    const res = await api.post('/notes', body, {
       headers: {
-        Cookie: cookieHeader,
+        Cookie: cookieStore.toString(),
+        'Content-Type': 'application/json',
       },
     });
 
-    return NextResponse.json(data);
+    return NextResponse.json(res.data, { status: res.status });
   } catch (error) {
-    return createErrorResponse(error as ApiError);
+    if (isAxiosError(error)) {
+      logErrorResponse(error.response?.data);
+      return NextResponse.json(
+        { error: error.message, response: error.response?.data },
+        { status: error.status }
+      );
+    }
+    logErrorResponse({ message: (error as Error).message });
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

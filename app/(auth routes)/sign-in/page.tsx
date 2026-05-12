@@ -1,6 +1,6 @@
 "use client"
+
 import css from "@/app/(auth routes)/sign-in/SignIn.module.css";
-import { ApiError } from "@/app/api/api";
 import { LoginRequest } from "@/lib/api/clientApi";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -25,12 +25,12 @@ export default function SignIn() {
         setError("Invalid email or password");
       }
     } catch (error) {
-      setError(
-        (error as ApiError).response?.data?.error ??
-        (error as ApiError).message
-        ?? "Oops... some error",
-      );
-    };
+  if (error instanceof Error) {
+    setError(error.message);
+  } else {
+    setError("Oops... some error");
+  }
+}
   };
 
     return (

@@ -36,7 +36,7 @@ export default async function Profile() {
 
         <div className={css.avatarWrapper}>
           <Image
-            src={"/notehub-og-meta.jpg"}
+            src={user.avatar}
             alt="User Avatar"
             width={120}
             height={120}

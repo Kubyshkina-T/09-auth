@@ -1,6 +1,5 @@
 "use client"
 import css from "@/app/(auth routes)/sign-up/SignUp.module.css"
-import { ApiError } from "@/app/api/api";
 import { register, RegisterRequest } from "@/lib/api/clientApi"
 import { useAuthStore } from "@/lib/store/authStore";
 import { useRouter } from "next/navigation";
@@ -22,13 +21,13 @@ export default function SignUp() {
       } else {
         setError("Invalid id email or password");
       }
-    } catch (error){
-    setError(
-      (error as ApiError).response?.data?.error ??
-      (error as ApiError).message ??
-      "Oops... some error"
-    );
+    } catch (error) {
+  if (error instanceof Error) {
+    setError(error.message);
+  } else {
+    setError("Oops... some error");
   }
+}
 };
 
     return (
