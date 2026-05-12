@@ -3,6 +3,34 @@ import type { FormValues } from "../../components/NoteForm/NoteForm";
 import { nextServer } from "./api";
 import { User } from "@/types/user";
 
+export interface NotesResponse {
+  notes: Note[];
+  totalPages: number;
+}
+
+export const fetchNotes = async (
+  page: number = 1,
+  perPage: number = 12,
+    searchQuery: string = "",
+  tag?: string
+): Promise<NotesResponse> => {
+    const res = await nextServer.get<NotesResponse>("/notes", {
+    params: {
+      page,
+      perPage,
+            search: searchQuery,
+      tag,
+        },
+        
+  });
+
+  return res.data;
+};
+
+export const fetchNoteById = async (postId: string): Promise<Note> => {
+  const res = await nextServer.get<Note>(`/notes/${postId}`);
+  return res.data;
+} 
 
 
 export const createNote = async (note: FormValues): Promise<Note> => {
