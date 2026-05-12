@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import css from "./ProfilePage.module.css";
 import Link from "next/link";
-import { User } from "@/types/user";
 import Image from "next/image";
+import { getServerMe } from "@/lib/api/serverApi";
 
 export const metadata: Metadata = {
   title: "Profile | NoteHub",
@@ -22,7 +22,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Profile() {
+export default async function Profile() {
+  const user = await getServerMe();
   return (
     <main className={css.mainContent}>
       <div className={css.profileCard}>
@@ -44,8 +45,8 @@ export default function Profile() {
         </div>
 
         <div className={css.profileInfo}>
-          <p>Username: your_username</p>
-          <p>Email: your_email@example.com</p>
+          <p>Username:{user.username }</p>
+          <p>Email: {user.email }</p>
         </div>
       </div>
     </main>

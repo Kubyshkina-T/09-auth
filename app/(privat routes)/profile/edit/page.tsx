@@ -47,7 +47,7 @@ router.push("/profile")
 
     <form className={css.profileInfo} onSubmit={handleSubmit}>
       <div className={css.usernameWrapper}>
-              <label htmlFor="username">Username:</label>
+              <label htmlFor="username">Username:{user?.username }</label>
         <input id="username"
           type="text"
                 className={css.input}

@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers';
 import { nextServer } from './api';
-import { Note, User } from '@/lib/api/clientApi';
+import { Note } from '@/types/note';
+import { User } from '@/types/user';
+
 
 export const checkServerSession = async () => {
   const cookieStore = await cookies();
@@ -14,9 +16,12 @@ export const checkServerSession = async () => {
 
 export const getServerMe = async (): Promise<User> => {
   const cookieStore = await cookies();
-  const { data } = await nextServer.get('/auth/me', {
+  const { data } = await nextServer.get('/users/me', {
     headers: {
-      Cookie: cookieStore.toString(),
+      Cookie: cookieStore.getAll()
+    .map(({ name, value }) => `${name}=${value}`)
+    .join("; ")
+,
     },
   });
   return data;

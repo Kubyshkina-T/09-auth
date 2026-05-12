@@ -2,7 +2,7 @@
 import type { Note} from "@/types/note";
 import type { FormValues } from "../../components/NoteForm/NoteForm";
 import { nextServer } from "./api";
-
+import { User } from "@/types/user";
 
 export interface NotesResponse {
   notes: Note[];
@@ -29,7 +29,6 @@ export const fetchNotes = async (
 };
 
 export const fetchNoteById = async (postId: string) => {
-    console.log("ID:", postId);
   const res = await nextServer.get<Note>(`/notes/${postId}`);
   return res.data;
 } 
@@ -58,7 +57,6 @@ export type Category = {
 
 
 // Auth
-import { User } from "@/types/user";
 
 export type RegisterRequest = {
   email: string;
@@ -81,6 +79,7 @@ export const login = async(data: LoginRequest) => {
   const res = await nextServer.post<User>("/auth/login", data);
   return res.data;
 }
+
 
 type CheckSessionRequest = {
   success: boolean;
