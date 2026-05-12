@@ -47,6 +47,8 @@ export const fetchNotes = async (
     searchQuery: string = "",
   tag?: string
 ): Promise<NotesResponse> => {
+  const cookieStore = await cookies();
+
     const res = await nextServer.get<NotesResponse>("/notes", {
     params: {
       page,
@@ -54,13 +56,20 @@ export const fetchNotes = async (
             search: searchQuery,
       tag,
         },
-        
+      headers: {
+      Cookie: cookieStore.toString(),
+    },  
   });
 
   return res.data;
 };
 
 export const fetchNoteById = async (postId: string): Promise<Note> => {
-  const res = await nextServer.get<Note>(`/notes/${postId}`);
+  const cookieStore = await cookies();
+  const res = await nextServer.get<Note>(`/notes/${postId}`, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
   return res.data;
 } 
