@@ -1,5 +1,5 @@
 "use client"
-import css from "@/app/(privat routes)/profile/edit/EditProfilePage.module.css";
+import css from "@/app/(private routes)/profile/edit/EditProfilePage.module.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
