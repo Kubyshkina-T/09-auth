@@ -25,16 +25,6 @@ export const getServerMe = async (): Promise<User> => {
   return data;
 };
 
-export const getServerSingleNote = async (id: string) => {
-  const cookieStore = await cookies();
-  const res = await nextServer.get<Note>(`/notes/${id}`, {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
-  return res.data;
-};
-
 
 export interface NotesResponse {
   notes: Note[];
