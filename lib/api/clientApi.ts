@@ -61,7 +61,7 @@ export type Category = {
 export type RegisterRequest = {
   email: string;
   password: string;
-  userName: string;
+  // userName: string;
 };
 
 export const register = async (data: RegisterRequest) => {
